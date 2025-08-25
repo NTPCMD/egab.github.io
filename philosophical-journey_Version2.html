@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Philosophical Journey</title>
+<style>
+  body { font-family: Georgia, serif; text-align: center; margin: 50px; background: #f5f5f5; }
+  button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; }
+  img { margin-top: 20px; max-width: 400px; border-radius: 10px; }
+</style>
+</head>
+<body>
+<h1>The Philosophical Journey</h1>
+<p id="story">You stand at the crossroads of existence. Which path do you take?</p>
+<div id="choices"></div>
+
+<script>
+// 64 distinct nodes, branching, with dead ends, loops, and a single ultimate ending
+const adventure = {
+  start: {
+    text: "Two paths lie ahead: one of contemplation, one of action.",
+    choices: [
+      { text: "Path of Contemplation", next: "contemplation1" },
+      { text: "Path of Action", next: "action1" }
+    ]
+  },
+
+  // --- CONTEMPLATION BRANCH (1-32) ---
+
+  contemplation1: {
+    text: "You sit beneath an ancient tree. Do you focus on your breath or on the world around you?",
+    choices: [
+      { text: "Focus on Breath", next: "contemplation2" },
+      { text: "Focus on World", next: "contemplation3" }
+    ]
+  },
+  contemplation2: {
+    text: "Breath slows. Memories surface: childhood or past regrets?",
+    choices: [
+      { text: "Recall Childhood", next: "contemplation4" },
+      { text: "Face Regrets", next: "contemplation5" }
+    ]
+  },
+  contemplation3: {
+    text: "Birdsong fills your senses. Do you listen or try to mimic the birds?",
+    choices: [
+      { text: "Listen", next: "contemplation6" },
+      { text: "Mimic", next: "deadEnd1" }
+    ]
+  },
+  contemplation4: {
+    text: "A memory of joy. Do you hold onto it or let it pass?",
+    choices: [
+      { text: "Hold On", next: "contemplation7" },
+      { text: "Let Pass", next: "contemplation8" }
+    ]
+  },
+  contemplation5: {
+    text: "Regrets weigh heavy. Do you forgive yourself or wallow?",
+    choices: [
+      { text: "Forgive", next: "contemplation9" },
+      { text: "Wallow", next: "deadEnd2" }
+    ]
+  },
+  contemplation6: {
+    text: "You hear a hidden message in the song. Do you decode it or ignore it?",
+    choices: [
+      { text: "Decode", next: "contemplation10" },
+      { text: "Ignore", next: "deadEnd3" }
+    ]
+  },
+  contemplation7: {
+    text: "Joy lingers, but attachment grows. Do you detach or deepen the feeling?",
+    choices: [
+      { text: "Detach", next: "contemplation11" },
+      { text: "Deepen", next: "deadEnd4" }
+    ]
+  },
+  contemplation8: {
+    text: "A sense of peace arises. Do you meditate further or open your eyes?",
+    choices: [
+      { text: "Meditate Further", next: "contemplation12" },
+      { text: "Open Eyes", next: "deadEnd5" }
+    ]
+  },
+  contemplation9: {
+    text: "Self-forgiveness is difficult. Do you write your regrets or speak them aloud?",
+    choices: [
+      { text: "Write", next: "contemplation13" },
+      { text: "Speak", next: "contemplation14" }
+    ]
+  },
+  contemplation10: {
+    text: "The message is a riddle of existence. Solve it or ponder it?",
+    choices: [
+      { text: "Solve", next: "contemplation15" },
+      { text: "Ponder", next: "deadEnd6" }
+    ]
+  },
+  contemplation11: {
+    text: "Detachment brings clarity. Do you seek a teacher or continue alone?",
+    choices: [
+      { text: "Seek Teacher", next: "contemplation16" },
+      { text: "Continue Alone", next: "contemplation17" }
+    ]
+  },
+  contemplation12: {
+    text: "A vision appears: a mountain or a river?",
+    choices: [
+      { text: "Mountain", next: "contemplation18" },
+      { text: "River", next: "contemplation19" }
+    ]
+  },
+  contemplation13: {
+    text: "The written word brings relief. Do you burn the paper or keep it?",
+    choices: [
+      { text: "Burn", next: "contemplation20" },
+      { text: "Keep", next: "deadEnd7" }
+    ]
+  },
+  contemplation14: {
+    text: "Your voice echoes. Do you listen or shout louder?",
+    choices: [
+      { text: "Listen", next: "contemplation21" },
+      { text: "Shout Louder", next: "deadEnd8" }
+    ]
+  },
+  contemplation15: {
+    text: "The riddle solved, you glimpse the infinite. Proceed or return?",
+    choices: [
+      { text: "Proceed", next: "contemplation22" },
+      { text: "Return", next: "contemplation10" }
+    ]
+  },
+  contemplation16: {
+    text: "A wise hermit gives you a koan. Contemplate or ask for help?",
+    choices: [
+      { text: "Contemplate", next: "contemplation23" },
+      { text: "Ask for Help", next: "deadEnd9" }
+    ]
+  },
+  contemplation17: {
+    text: "Solitude deepens wisdom. Do you continue meditating or explore the world?",
+    choices: [
+      { text: "Meditate", next: "contemplation24" },
+      { text: "Explore", next: "contemplation25" }
+    ]
+  },
+  contemplation18: {
+    text: "At the mountain peak, you see the whole journey. Descend or stay?",
+    choices: [
+      { text: "Descend", next: "contemplation26" },
+      { text: "Stay", next: "deadEnd10" }
+    ]
+  },
+  contemplation19: {
+    text: "The river's flow is endless. Do you swim or build a raft?",
+    choices: [
+      { text: "Swim", next: "contemplation27" },
+      { text: "Build Raft", next: "contemplation28" }
+    ]
+  },
+  contemplation20: {
+    text: "Ashes rise. Do you scatter them or bury them?",
+    choices: [
+      { text: "Scatter", next: "contemplation29" },
+      { text: "Bury", next: "deadEnd11" }
+    ]
+  },
+  contemplation21: {
+    text: "A new insight dawns. Do you share it or keep it secret?",
+    choices: [
+      { text: "Share", next: "contemplation30" },
+      { text: "Keep Secret", next: "deadEnd12" }
+    ]
+  },
+  contemplation22: {
+    text: "You approach a gate of light. Open it or walk past?",
+    choices: [
+      { text: "Open", next: "demyra" },
+      { text: "Walk Past", next: "deadEnd13" }
+    ]
+  },
+  contemplation23: {
+    text: "You solve the koan. Do you thank the hermit or move silently on?",
+    choices: [
+      { text: "Thank Hermit", next: "demyra" },
+      { text: "Move On", next: "deadEnd14" }
+    ]
+  },
+  contemplation24: {
+    text: "Meditation leads to enlightenment. Do you seek to teach or vanish?",
+    choices: [
+      { text: "Teach", next: "demyra" },
+      { text: "Vanish", next: "deadEnd15" }
+    ]
+  },
+  contemplation25: {
+    text: "Exploring, you meet a lost soul. Help them or ignore?",
+    choices: [
+      { text: "Help", next: "demyra" },
+      { text: "Ignore", next: "deadEnd16" }
+    ]
+  },
+  contemplation26: {
+    text: "In the valley, a village awaits. Do you settle or wander?",
+    choices: [
+      { text: "Settle", next: "deadEnd17" },
+      { text: "Wander", next: "demyra" }
+    ]
+  },
+  contemplation27: {
+    text: "Swimming, you tire. Rest on a rock or keep going?",
+    choices: [
+      { text: "Rest", next: "deadEnd18" },
+      { text: "Keep Going", next: "demyra" }
+    ]
+  },
+  contemplation28: {
+    text: "Your raft takes you to a hidden island. Explore or signal for help?",
+    choices: [
+      { text: "Explore", next: "demyra" },
+      { text: "Signal", next: "deadEnd19" }
+    ]
+  },
+  contemplation29: {
+    text: "Ashes in the wind, you feel free. Do you dance or weep?",
+    choices: [
+      { text: "Dance", next: "demyra" },
+      { text: "Weep", next: "deadEnd20" }
+    ]
+  },
+  contemplation30: {
+    text: "Your insight inspires others. Do you lead or step back?",
+    choices: [
+      { text: "Lead", next: "demyra" },
+      { text: "Step Back", next: "deadEnd21" }
+    ]
+  },
+
+  // --- ACTION BRANCH (33-64) ---
+
+  action1: {
+    text: "You stride forward. A fork: climb a mountain or enter a city?",
+    choices: [
+      { text: "Climb Mountain", next: "action2" },
+      { text: "Enter City", next: "action3" }
+    ]
+  },
+  action2: {
+    text: "The climb is steep. Do you press on or rest?",
+    choices: [
+      { text: "Press On", next: "action4" },
+      { text: "Rest", next: "action5" }
+    ]
+  },
+  action3: {
+    text: "The city bustles. Do you seek wisdom from a sage or join a festival?",
+    choices: [
+      { text: "Seek Sage", next: "action6" },
+      { text: "Join Festival", next: "deadEnd22" }
+    ]
+  },
+  action4: {
+    text: "You reach a ledge. A storm approaches. Take shelter or continue?",
+    choices: [
+      { text: "Shelter", next: "action7" },
+      { text: "Continue", next: "deadEnd23" }
+    ]
+  },
+  action5: {
+    text: "You dream of a phoenix. Follow it or ignore?",
+    choices: [
+      { text: "Follow", next: "action8" },
+      { text: "Ignore", next: "deadEnd24" }
+    ]
+  },
+  action6: {
+    text: "The sage offers you a riddle. Try to solve or ask for answer?",
+    choices: [
+      { text: "Solve", next: "action9" },
+      { text: "Ask", next: "deadEnd25" }
+    ]
+  },
+  action7: {
+    text: "In shelter, you meet a stranger. Trust them or be wary?",
+    choices: [
+      { text: "Trust", next: "action10" },
+      { text: "Wary", next: "deadEnd26" }
+    ]
+  },
+  action8: {
+    text: "The phoenix leads you to a hidden cave. Enter or wait outside?",
+    choices: [
+      { text: "Enter", next: "action11" },
+      { text: "Wait", next: "deadEnd27" }
+    ]
+  },
+  action9: {
+    text: "You solve the riddle! The sage shows you a secret path. Take it or refuse?",
+    choices: [
+      { text: "Take Path", next: "action12" },
+      { text: "Refuse", next: "deadEnd28" }
+    ]
+  },
+  action10: {
+    text: "The stranger gives you a map. Follow it or discard?",
+    choices: [
+      { text: "Follow", next: "action13" },
+      { text: "Discard", next: "deadEnd29" }
+    ]
+  },
+  action11: {
+    text: "Inside the cave, treasures and traps. Take treasure or search for exit?",
+    choices: [
+      { text: "Take Treasure", next: "deadEnd30" },
+      { text: "Search Exit", next: "action14" }
+    ]
+  },
+  action12: {
+    text: "The path leads to a garden. Rest or keep moving?",
+    choices: [
+      { text: "Rest", next: "deadEnd31" },
+      { text: "Keep Moving", next: "demyra" }
+    ]
+  },
+  action13: {
+    text: "The map leads to a river. Build a boat or swim?",
+    choices: [
+      { text: "Build Boat", next: "action15" },
+      { text: "Swim", next: "deadEnd32" }
+    ]
+  },
+  action14: {
+    text: "You find another wanderer. Team up or travel alone?",
+    choices: [
+      { text: "Team Up", next: "demyra" },
+      { text: "Alone", next: "deadEnd33" }
+    ]
+  },
+  action15: {
+    text: "Your boat takes you to an island. Explore or rest?",
+    choices: [
+      { text: "Explore", next: "demyra" },
+      { text: "Rest", next: "deadEnd34" }
+    ]
+  },
+
+  // --- Additional Dead Ends (to reach 64) ---
+
+  deadEnd1: { text: "Mimicking birds, you forget your own voice. Try again?", choices: [
+    { text: "Yes", next: "contemplation3" }, { text: "No", next: "deadEnd1" }
+  ] },
+  deadEnd2: { text: "Wallowing, you grow weary. Try again?", choices: [
+    { text: "Yes", next: "contemplation5" }, { text: "No", next: "deadEnd2" }
+  ] },
+  deadEnd3: { text: "Ignoring the song, you miss its lesson. Try again?", choices: [
+    { text: "Yes", next: "contemplation6" }, { text: "No", next: "deadEnd3" }
+  ] },
+  deadEnd4: { text: "Attachment leads to sorrow. Try again?", choices: [
+    { text: "Yes", next: "contemplation7" }, { text: "No", next: "deadEnd4" }
+  ] },
+  deadEnd5: { text: "Opening your eyes, the magic fades. Try again?", choices: [
+    { text: "Yes", next: "contemplation8" }, { text: "No", next: "deadEnd5" }
+  ] },
+  deadEnd6: { text: "Pondering endlessly, you remain stuck. Try again?", choices: [
+    { text: "Yes", next: "contemplation10" }, { text: "No", next: "deadEnd6" }
+  ] },
+  deadEnd7: { text: "Clinging to the past, peace eludes you. Try again?", choices: [
+    { text: "Yes", next: "contemplation13" }, { text: "No", next: "deadEnd7" }
+  ] },
+  deadEnd8: { text: "Shouting loses meaning. Try again?", choices: [
+    { text: "Yes", next: "contemplation14" }, { text: "No", next: "deadEnd8" }
+  ] },
+  deadEnd9: { text: "Help brings only riddles. Try again?", choices: [
+    { text: "Yes", next: "contemplation16" }, { text: "No", next: "deadEnd9" }
+  ] },
+  deadEnd10: { text: "Staying, you become the mountain. Try again?", choices: [
+    { text: "Yes", next: "contemplation18" }, { text: "No", next: "deadEnd10" }
+  ] },
+  deadEnd11: { text: "Burying, you cannot let go. Try again?", choices: [
+    { text: "Yes", next: "contemplation20" }, { text: "No", next: "deadEnd11" }
+  ] },
+  deadEnd12: { text: "Secrets weigh heavy. Try again?", choices: [
+    { text: "Yes", next: "contemplation21" }, { text: "No", next: "deadEnd12" }
+  ] },
+  deadEnd13: { text: "Missing the gate, you wander lost. Try again?", choices: [
+    { text: "Yes", next: "contemplation22" }, { text: "No", next: "deadEnd13" }
+  ] },
+  deadEnd14: { text: "Moving on, you forget the lesson. Try again?", choices: [
+    { text: "Yes", next: "contemplation23" }, { text: "No", next: "deadEnd14" }
+  ] },
+  deadEnd15: { text: "You vanish from memory. Try again?", choices: [
+    { text: "Yes", next: "contemplation24" }, { text: "No", next: "deadEnd15" }
+  ] },
+  deadEnd16: { text: "Ignoring others, loneliness grows. Try again?", choices: [
+    { text: "Yes", next: "contemplation25" }, { text: "No", next: "deadEnd16" }
+  ] },
+  deadEnd17: { text: "Settling, you lose your curiosity. Try again?", choices: [
+    { text: "Yes", next: "contemplation26" }, { text: "No", next: "deadEnd17" }
+  ] },
+  deadEnd18: { text: "Rest turns to sleep. Try again?", choices: [
+    { text: "Yes", next: "contemplation27" }, { text: "No", next: "deadEnd18" }
+  ] },
+  deadEnd19: { text: "No one hears your call. Try again?", choices: [
+    { text: "Yes", next: "contemplation28" }, { text: "No", next: "deadEnd19" }
+  ] },
+  deadEnd20: { text: "Tears flow endlessly. Try again?", choices: [
+    { text: "Yes", next: "contemplation29" }, { text: "No", next: "deadEnd20" }
+  ] },
+  deadEnd21: { text: "Stepping back, your lesson is lost. Try again?", choices: [
+    { text: "Yes", next: "contemplation30" }, { text: "No", next: "deadEnd21" }
+  ] },
+  deadEnd22: { text: "Festivities distract you from your quest. Try again?", choices: [
+    { text: "Yes", next: "action3" }, { text: "No", next: "deadEnd22" }
+  ] },
+  deadEnd23: { text: "The storm sweeps you away. Try again?", choices: [
+    { text: "Yes", next: "action4" }, { text: "No", next: "deadEnd23" }
+  ] },
+  deadEnd24: { text: "The phoenix vanishes. Try again?", choices: [
+    { text: "Yes", next: "action5" }, { text: "No", next: "deadEnd24" }
+  ] },
+  deadEnd25: { text: "Answers without effort yield nothing. Try again?", choices: [
+    { text: "Yes", next: "action6" }, { text: "No", next: "deadEnd25" }
+  ] },
+  deadEnd26: { text: "Distrust leaves you alone. Try again?", choices: [
+    { text: "Yes", next: "action7" }, { text: "No", next: "deadEnd26" }
+  ] },
+  deadEnd27: { text: "Waiting, you miss your chance. Try again?", choices: [
+    { text: "Yes", next: "action8" }, { text: "No", next: "deadEnd27" }
+  ] },
+  deadEnd28: { text: "Refusing, the sage disappears. Try again?", choices: [
+    { text: "Yes", next: "action9" }, { text: "No", next: "deadEnd28" }
+  ] },
+  deadEnd29: { text: "You lose your way without a map. Try again?", choices: [
+    { text: "Yes", next: "action10" }, { text: "No", next: "deadEnd29" }
+  ] },
+  deadEnd30: { text: "Greed triggers a trap. Try again?", choices: [
+    { text: "Yes", next: "action11" }, { text: "No", next: "deadEnd30" }
+  ] },
+  deadEnd31: { text: "Rest turns to stagnation. Try again?", choices: [
+    { text: "Yes", next: "action12" }, { text: "No", next: "deadEnd31" }
+  ] },
+  deadEnd32: { text: "Swimming, you tire and sink. Try again?", choices: [
+    { text: "Yes", next: "action13" }, { text: "No", next: "deadEnd32" }
+  ] },
+  deadEnd33: { text: "Alone, you get lost. Try again?", choices: [
+    { text: "Yes", next: "action14" }, { text: "No", next: "deadEnd33" }
+  ] },
+  deadEnd34: { text: "Resting, you miss discovery. Try again?", choices: [
+    { text: "Yes", next: "action15" }, { text: "No", next: "deadEnd34" }
+  ] },
+
+  // --- THE FINAL ENDING ---
+
+  demyra: {
+    text: "You reach Demyra: the convergence of the monkeys. In this place, unity is found and the journey becomes the destination. - Demyra the monkey.",
+    choices: [],
+    image: "image.jpg"
+  }
+};
+
+let current = "start";
+
+function showNode(nodeKey) {
+  const node = adventure[nodeKey];
+  document.getElementById("story").textContent = node.text;
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = "";
+
+  if (node.image) {
+    const img = document.createElement("img");
+    img.src = node.image;
+    img.alt = "Demyra";
+    choicesDiv.appendChild(img);
+  }
+
+  node.choices.forEach(choice => {
+    const btn = document.createElement("button");
+    btn.textContent = choice.text;
+    btn.onclick = () => showNode(choice.next);
+    choicesDiv.appendChild(btn);
+  });
+}
+
+showNode(current);
+</script>
+</body>
+</html>
